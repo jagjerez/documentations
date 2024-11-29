@@ -1,0 +1,27 @@
+sequenceDiagram
+    participant Cliente as Cliente Web/Móvil
+    participant OAuth as Servicio OAuth2
+    participant Usuarios as Microservicio de Usuarios
+    participant Clientes as Microservicio de Clientes
+    participant Permisos as Microservicio de Permisos
+
+    # Flujo de Login
+    Cliente->>OAuth: 1. Solicitud de Login
+    OAuth->>Usuarios: 2. Validar Credenciales de Usuario
+    Usuarios-->>OAuth: 3. Credenciales Válidas
+    OAuth->>Clientes: 4. Verificar Asociación Usuario-Cliente
+    Clientes-->>OAuth: 5. Confirmación de Asociación
+    OAuth->>Permisos: 6. Obtener Permisos del Usuario
+    Permisos-->>OAuth: 7. Devolver Permisos
+    OAuth->>Cliente: 8. Generar Token de Acceso
+    
+    # Flujo de Autorización
+    Cliente->>OAuth: 9. Solicitud de Autorización
+    OAuth->>Permisos: 10. Verificar Permisos de Acceso
+    Permisos-->>OAuth: 11. Confirmar Permisos
+    OAuth->>Cliente: 12. Conceder Autorización/Token
+
+    # Flujo de Logout
+    Cliente->>OAuth: 13. Solicitud de Logout
+    OAuth->>OAuth: 14. Invalidar Token
+    OAuth->>Cliente: 15. Confirmación de Logout
